@@ -209,4 +209,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Saat dijalankan via `python -m pyproc.mcp.server`, modul ini dieksekusi
+    # sebagai `__main__`. main() mengimpor pyproc.mcp.tools yang re-import
+    # `pyproc.mcp.server` sebagai modul terpisah -> tool terdaftar di instance
+    # yang SALAH (tools/list kosong). Self-reimport modul asli supaya semua
+    # state (server, _tool_handlers) dipakai bersama - identik dengan console
+    # script `pyproc-mcp` (pyproc.mcp.server:main).
+    from pyproc.mcp.server import main as _main
+
+    _main()
